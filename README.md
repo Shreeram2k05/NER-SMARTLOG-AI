@@ -100,53 +100,14 @@ NER-SMARTLOG-AI/
 
 ---
 
-## 6. Smart India Hackathon (SIH) 3-Minute Demonstration Flow
-
-To deliver a compelling presentation for evaluators and jury members, follow this step-by-step workflow:
-
-1. **Step 1: Command Center Overview**
-   - Point out the top status: `ONLINE (DEMO)`, `North Eastern Region (8 States)`.
-   - Review the KPI metrics: **128 Active Vehicles**, **342 Deliveries**, **17 High-Risk Corridors**, **8 Active Disruptions**, **24 min Average Delay**.
-   - Show the interactive Leaflet GIS map and toggle layers (`VEHICLES`, `ROUTES`, `RISK`, `ACCESSIBILITY`, `DISRUPTIONS`).
-2. **Step 2: AI Route Optimizer**
-   - Click **AI Route Optimizer** in the left sidebar.
-   - Parameters are preset: **Guwahati** ➔ **Imphal**, Cargo: **Medicines (Cold Chain)**, Priority: **Emergency**, Mode: **Multimodal**.
-   - Click **✦ FIND AI OPTIMAL ROUTE**.
-   - Observe the 7-step AI analysis sequence (Terrain, Weather radar, Geotechnical risk, Accessibility, Corridors, ETA, Optimal route).
-   - Review **Route A (Recommended)**: 312 km, 7h 20m, LOW RISK, 91% Accessibility, 94% Confidence.
-   - Expand the **WHY DID AI RECOMMEND THIS?** panel to demonstrate explainable AI.
-3. **Step 3: Trigger Real-Time Disruption Simulation**
-   - Click the prominent **Demo Simulation** button in the top navigation bar.
-   - Click **[ Simulate Landslide ]** (NH-2 Senapati Corridor).
-4. **Step 4: Observe Global System Reaction**
-   - The application state reacts dynamically:
-     - Route A turns **CRITICAL / HIGH RISK** with an ETA increase to **9h 05m**.
-     - A new Critical Alert appears: `CRITICAL — LANDSLIDE DETECTED on NH-2 Corridor`.
-     - High-Risk Corridors KPI increments to **18**, Disruptions to **9**, and Average Delay spikes to **38 min**.
-     - Live Intelligence feed immediately broadcasts the Senapati pass closure.
-     - Vehicle **NER-104** (carrying urgent medicines) is flagged as **AT RISK**.
-5. **Step 5: Autonomous Emergency Rerouting**
-   - In the Route Optimizer hero card, the danger banner displays: `⚠ HIGH RISK DETECTED: Landslide predicted on primary corridor`.
-   - The AI identifies **Route B (NH-37 Jiribam Bypass)**: ETA 7h 42m, Risk: LOW, Accessibility: 89%.
-   - Click **REROUTE VEHICLE**.
-   - A success toast announces: `✓ Vehicle NER-104 successfully rerouted to NH-37 bypass!`.
-   - The map animates to the new bypass path, vehicle status returns to **ON ROUTE (Rerouted)**, and delay normalizes.
-6. **Step 6: Live Fleet & Accessibility Verification**
-   - Navigate to **Live Tracking**: Inspect vehicle `NER-104` following the new bypass. Click *Details* to open the driver telematics drawer.
-   - Navigate to **Accessibility Intel**: Review the vulnerability index for **Tamenglong** (Connectivity: 42%, Average Supply ETA: 11h 40m, single-lane bridge bottlenecks).
-   - Navigate to **Alert Center**: Find the Landslide alert and click **ACKNOWLEDGE** to show audit logging and badge decrement.
-   - Navigate to **Analytics**: Switch timeframes (7D, 30D, 90D, 1Y) to demonstrate historical disruption trends and AI performance deltas.
-
----
-
-## 7. Important Data Disclaimer
+## 6. Important Data Disclaimer
 
 > **DEMO DATA NOTICE**:  
 > NER-SMARTLOG AI is a demonstration platform using simulated logistics, meteorological, geotechnical disruption, and vehicle GPS telemetry data. It is not currently connected to live government production systems.
 
 ---
 
-## 8. Transitioning from Demo to Production (API-Ready Architecture)
+## 7. Transitioning from Demo to Production (API-Ready Architecture)
 
 The frontend does not hardcode data directly inside the UI components. Instead, all operations communicate through a clean service abstraction layer (`window.api` inside `script.js`).
 
@@ -186,7 +147,7 @@ window.api = {
 
 ---
 
-## 9. Deployment Instructions
+## 8. Deployment Instructions
 
 This project can be deployed instantly to any static hosting provider without configuring build steps or package managers:
 
@@ -197,7 +158,7 @@ This project can be deployed instantly to any static hosting provider without co
 
 ---
 
-## 10. License & Credits
+## 9. License & Credits
 
 Developed for the Smart India Hackathon and logistics accessibility intelligence initiatives in the North Eastern Region of India.
 - Map Data &copy; [OpenStreetMap](https://www.openstreetmap.org/copyright) contributors, Tiles by [CartoDB](https://carto.com/).
