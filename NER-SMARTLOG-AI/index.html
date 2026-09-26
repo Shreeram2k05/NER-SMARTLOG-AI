@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NER-SMARTLOG AI - Logistics & Accessibility Intelligence Platform</title>
+  <link rel="icon" type="image/svg+xml" href="assets/logo/favicon.svg">
+
+  <!-- Google Fonts (Plus Jakarta Sans & JetBrains Mono) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- ======================================================================
+         LEFT SIDEBAR NAVIGATION
+         ====================================================================== -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <a href="#dashboard" class="sidebar-brand">
+          <div class="brand-icon-box">
+            <i class="fa-solid fa-route"></i>
+          </div>
+          <div class="brand-text">
+            <h1>NER-SMARTLOG <span>AI</span></h1>
+            <span class="brand-subtitle">LOGISTICS INTELLIGENCE</span>
+          </div>
+        </a>
+        <button class="sidebar-collapse-btn" id="sidebarCollapseBtn" title="Toggle Sidebar">
+          <i class="fa-solid fa-bars-staggered"></i>
+        </button>
+      </div>
+
+      <nav class="sidebar-nav">
+        <span class="nav-section-title">COMMAND SYSTEMS</span>
+        
+        <a href="#dashboard" class="nav-link active" data-view="dashboard">
+          <i class="fa-solid fa-chart-line"></i>
+          <span>Dashboard</span>
+        </a>
+
+        <a href="#route-optimizer" class="nav-link" data-view="route-optimizer">
+          <i class="fa-solid fa-wand-magic-sparkles"></i>
+          <span>AI Route Optimizer</span>
+        </a>
+
+        <a href="#multimodal" class="nav-link" data-view="multimodal">
+          <i class="fa-solid fa-network-wired"></i>
+          <span>Multimodal Planner</span>
+        </a>
+
+        <a href="#disruptions" class="nav-link" data-view="disruptions">
+          <i class="fa-solid fa-cloud-showers-heavy"></i>
+          <span>Disruption Intel</span>
+        </a>
+
+        <a href="#accessibility" class="nav-link" data-view="accessibility">
+          <i class="fa-solid fa-mountain-city"></i>
+          <span>Accessibility Intel</span>
+        </a>
+
+        <a href="#live-tracking" class="nav-link" data-view="live-tracking">
+          <i class="fa-solid fa-satellite-dish"></i>
+          <span>Live Tracking</span>
+        </a>
+
+        <a href="#alerts" class="nav-link" data-view="alerts">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          <span>Alert Center</span>
+          <span class="nav-badge" id="sidebarAlertCount">8</span>
+        </a>
+
+        <span class="nav-section-title">FIELD & ANALYTICS</span>
+
+        <a href="#field-reports" class="nav-link" data-view="field-reports">
+          <i class="fa-solid fa-clipboard-user"></i>
+          <span>Field Intelligence</span>
+        </a>
+
+        <a href="#analytics" class="nav-link" data-view="analytics">
+          <i class="fa-solid fa-chart-pie"></i>
+          <span>Analytics</span>
+        </a>
+
+        <a href="#settings" class="nav-link" data-view="settings">
+          <i class="fa-solid fa-sliders"></i>
+          <span>System Settings</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="system-status-pill" id="sidebarStatusPill">
+          <div class="status-beacon"></div>
+          <div class="status-info">
+            <span class="status-title">SYSTEM STATUS</span>
+            <span class="status-desc" id="sidebarStatusDesc">● ONLINE (DEMO)</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+
+    <!-- ======================================================================
+         MAIN CONTENT WRAPPER
+         ====================================================================== -->
+    <div class="main-wrapper">
+      
+      <!-- TOP NAVBAR -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open Navigation">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+
+          <!-- GLOBAL SEARCH BAR -->
+          <div class="search-container">
+            <div class="search-input-wrapper">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input type="text" id="globalSearchInput" class="search-input" placeholder="Search vehicles, corridors, districts, disruptions, alerts...">
+              <span class="search-shortcut">⌘K</span>
+            </div>
+            
+            <!-- Global Search Results Dropdown -->
+            <div class="search-results-dropdown" id="searchResultsDropdown"></div>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <!-- REGION SELECTOR BADGE -->
+          <div class="region-selector-badge">
+            <i class="fa-solid fa-map-location-dot"></i>
+            <span>North Eastern Region (8 States)</span>
+          </div>
+
+          <!-- DEMO SIMULATION BUTTON -->
+          <button class="btn-sim-trigger" id="openDemoSimBtn">
+            <i class="fa-solid fa-flask-vial"></i>
+            <span>Demo Simulation</span>
+          </button>
+
+          <!-- NOTIFICATION BELL -->
+          <div style="position: relative;">
+            <button class="notif-bell-btn" id="notifBellBtn" title="Notifications">
+              <i class="fa-regular fa-bell"></i>
+              <span class="notif-badge-count" id="notifBadgeCount">3</span>
+            </button>
+
+            <!-- Notifications Dropdown -->
+            <div class="notif-dropdown" id="notifDropdown">
+              <div class="notif-header">
+                <h4><i class="fa-solid fa-bell text-cyan"></i> Notifications</h4>
+                <button class="btn btn-sm btn-outline" id="markAllReadBtn">Clear Read</button>
+              </div>
+              <div class="notif-list" id="notifListContainer"></div>
+              <div class="notif-footer">
+                <a href="#alerts" onclick="switchView('alerts')">View All In Alert Center &rarr;</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- USER PROFILE -->
+          <div style="position: relative;">
+            <div class="profile-pill" id="userProfileBtn">
+              <div class="profile-avatar">SA</div>
+              <span class="profile-name">System Admin</span>
+              <i class="fa-solid fa-chevron-down text-muted" style="font-size: 0.7rem;"></i>
+            </div>
+
+            <div class="profile-dropdown" id="profileDropdown">
+              <div class="profile-dropdown-item" onclick="openSystemStatusModal()">
+                <i class="fa-solid fa-server"></i> System Status
+              </div>
+              <div class="profile-dropdown-item" onclick="openPreferencesModal()">
+                <i class="fa-solid fa-gear"></i> Preferences
+              </div>
+              <div class="profile-dropdown-item" onclick="openAboutModal()">
+                <i class="fa-solid fa-circle-info"></i> About Platform
+              </div>
+              <div class="profile-dropdown-item divider" onclick="showDemoToast('info', 'Demo Session Active (No authentication required)')">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout (Demo UI)
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- ==================================================================
+           DISCLAIMER & PROMINENT TAGLINE BANNER
+           ================================================================== -->
+      <div style="padding: 1.25rem 1.5rem 0;">
+        <div class="disclaimer-banner">
+          <div class="disclaimer-text">
+            <i class="fa-solid fa-shield-halved text-cyan" style="font-size: 1.1rem;"></i>
+            <div>
+              <strong>DEMO ENVIRONMENT • SIMULATED DATA:</strong>
+              NER-SMARTLOG AI is a demonstration platform using simulated logistics, weather, disruption and vehicle data. It is not currently connected to live government systems.
+            </div>
+          </div>
+          <span class="disclaimer-badge">DEMO DATA</span>
+        </div>
+      </div>
+
+
+      <!-- ==================================================================
+           VIEW 1: DASHBOARD
+           ================================================================== -->
+      <section class="view-content active-view" id="view-dashboard">
+        <div class="view-header">
+          <div class="view-title-group">
+            <h2><i class="fa-solid fa-compass text-cyan"></i> North Eastern Region Logistics Intelligence</h2>
+            <p>Real-time visibility, predictive disruption intelligence and AI-powered route optimization across 8 states.</p>
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            <button class="btn btn-outline" onclick="refreshDashboard()"><i class="fa-solid fa-arrows-rotate"></i> Refresh Telemetry</button>
+            <button class="btn btn-primary" onclick="switchView('route-optimizer')"><i class="fa-solid fa-wand-magic-sparkles"></i> AI Route Optimizer</button>
+          </div>
+        </div>
+
+        <!-- Intelligence Pipeline Visual Banner -->
+        <div class="pipeline-banner">
+          <div class="pipeline-step"><i class="fa-solid fa-database"></i> <span>DATA</span></div>
+          <i class="fa-solid fa-angle-right pipeline-arrow"></i>
+          <div class="pipeline-step"><i class="fa-solid fa-brain"></i> <span>PREDICT</span></div>
+          <i class="fa-solid fa-angle-right pipeline-arrow"></i>
+          <div class="pipeline-step"><i class="fa-solid fa-magnifying-glass-chart"></i> <span>ANALYZE</span></div>
+          <i class="fa-solid fa-angle-right pipeline-arrow"></i>
+          <div class="pipeline-step"><i class="fa-solid fa-map-location-dot"></i> <span>PLAN</span></div>
+          <i class="fa-solid fa-angle-right pipeline-arrow"></i>
+          <div class="pipeline-step active"><i class="fa-solid fa-wand-magic-sparkles"></i> <span>OPTIMIZE</span></div>
+          <i class="fa-solid fa-angle-right pipeline-arrow"></i>
+          <div class="pipeline-step highlight"><i class="fa-solid fa-satellite-dish"></i> <span>TRACK</span></div>
+          <i class="fa-solid fa-angle-right pipeline-arrow"></i>
+          <div class="pipeline-step"><i class="fa-solid fa-bell"></i> <span>ALERT</span></div>
+          <i class="fa-solid fa-angle-right pipeline-arrow"></i>
+          <div class="pipeline-step"><i class="fa-solid fa-shuffle"></i> <span>REROUTE</span></div>
+        </div>
+
+        <!-- 5 KPI Cards Grid -->
+        <div class="kpi-grid">
+          <div class="kpi-card" id="kpi-vehicles">
+            <div class="kpi-header">
+              <span class="kpi-label">Active Vehicles</span>
+              <div class="kpi-icon-box kpi-icon-blue"><i class="fa-solid fa-truck-fast"></i></div>
+            </div>
+            <div class="kpi-value-row">
+              <span class="kpi-value counter-value" data-target="128">128</span>
+              <span class="kpi-trend trend-up-green"><i class="fa-solid fa-arrow-trend-up"></i> +12.4%</span>
+            </div>
+            <span class="kpi-footer-text">from yesterday across 8 states</span>
+          </div>
+
+          <div class="kpi-card" id="kpi-deliveries">
+            <div class="kpi-header">
+              <span class="kpi-label">Deliveries in Transit</span>
+              <div class="kpi-icon-box kpi-icon-green"><i class="fa-solid fa-box-check"></i></div>
+            </div>
+            <div class="kpi-value-row">
+              <span class="kpi-value counter-value" data-target="342">342</span>
+              <span class="kpi-trend trend-up-green"><i class="fa-solid fa-arrow-trend-up"></i> +8.1%</span>
+            </div>
+            <span class="kpi-footer-text">96.4% on-schedule rate</span>
+          </div>
+
+          <div class="kpi-card" id="kpi-corridors">
+            <div class="kpi-header">
+              <span class="kpi-label">High-Risk Corridors</span>
+              <div class="kpi-icon-box kpi-icon-amber"><i class="fa-solid fa-triangle-exclamation"></i></div>
+            </div>
+            <div class="kpi-value-row">
+              <span class="kpi-value counter-value" id="kpiHighRiskCorridors" data-target="17">17</span>
+              <span class="kpi-trend trend-up-red"><i class="fa-solid fa-arrow-trend-up"></i> +2 risk</span>
+            </div>
+            <span class="kpi-footer-text">monitored hill pass sectors</span>
+          </div>
+
+          <div class="kpi-card" id="kpi-disruptions">
+            <div class="kpi-header">
+              <span class="kpi-label">Active Disruptions</span>
+              <div class="kpi-icon-box kpi-icon-red"><i class="fa-solid fa-hill-rockslide"></i></div>
+            </div>
+            <div class="kpi-value-row">
+              <span class="kpi-value counter-value" id="kpiActiveDisruptions" data-target="8">08</span>
+              <span class="kpi-trend trend-up-red"><i class="fa-solid fa-circle-exclamation"></i> 3 critical</span>
+            </div>
+            <span class="kpi-footer-text">landslides & flood hazard zones</span>
+          </div>
+
+          <div class="kpi-card" id="kpi-delay">
+            <div class="kpi-header">
+              <span class="kpi-label">Average ETA Delay</span>
+              <div class="kpi-icon-box kpi-icon-purple"><i class="fa-solid fa-clock-rotate-left"></i></div>
+            </div>
+            <div class="kpi-value-row">
+              <span class="kpi-value counter-value" id="kpiAvgDelay" data-target="24">24</span>
+              <span class="text-secondary font-mono" style="font-size: 1rem; font-weight: 700;">min</span>
+              <span class="kpi-trend trend-down-green" id="kpiDelayTrend"><i class="fa-solid fa-arrow-trend-down"></i> -15%</span>
+            </div>
+            <span class="kpi-footer-text" id="kpiDelaySub">reduced via AI predictive rerouting</span>
+          </div>
+        </div>
+
+        <!-- Command Center Map & Live Intelligence Panel -->
+        <div class="command-map-section">
+          <div class="map-card-wrapper">
+            <div class="map-card-header">
+              <div class="map-title">
+                <i class="fa-solid fa-map-location-dot text-cyan"></i>
+                <span>North Eastern Region Command GIS Map</span>
+                <span class="badge badge-on-route ml-2" style="font-size: 0.68rem;">LIVE SATELLITE TELEMETRY</span>
+              </div>
+
+              <!-- Map Layer Switchers -->
+              <div class="map-layer-controls">
+                <button class="layer-toggle-btn active" data-layer="vehicles" id="toggleLayerVehicles"><i class="fa-solid fa-truck"></i> VEHICLES</button>
+                <button class="layer-toggle-btn active" data-layer="routes" id="toggleLayerRoutes"><i class="fa-solid fa-route"></i> ROUTES</button>
+                <button class="layer-toggle-btn active layer-risk" data-layer="risk" id="toggleLayerRisk"><i class="fa-solid fa-triangle-exclamation"></i> RISK</button>
+                <button class="layer-toggle-btn active" data-layer="accessibility" id="toggleLayerAccess"><i class="fa-solid fa-mountain-city"></i> ACCESSIBILITY</button>
+                <button class="layer-toggle-btn active" data-layer="disruptions" id="toggleLayerDisruptions"><i class="fa-solid fa-cloud-showers-heavy"></i> DISRUPTIONS</button>
+                <button class="layer-toggle-btn" data-layer="hubs" id="toggleLayerHubs"><i class="fa-solid fa-warehouse"></i> HUBS</button>
+              </div>
+            </div>
+
+            <!-- Leaflet Map Container -->
+            <div id="commandCenterMap" class="map-container"></div>
+          </div>
+
+          <!-- Live Intelligence Stream Panel -->
+          <div class="intelligence-panel">
+            <div class="panel-header">
+              <div class="panel-title">
+                <i class="fa-solid fa-bolt text-cyan"></i>
+                <span>Live Intelligence</span>
+              </div>
+              <div class="live-indicator">
+                <span class="dot"></span>
+                <span>STREAM</span>
+              </div>
+            </div>
+
+            <div class="intelligence-feed" id="liveIntelligenceFeed">
+              <!-- Dynamically populated from JS -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ==================================================================
+           VIEW 2: AI ROUTE OPTIMIZER
+           ================================================================== -->
+      <section class="view-content" id="view-route-optimizer">
+        <div class="view-header">
+          <div class="view-title-group">
+            <h2><i class="fa-solid fa-wand-magic-sparkles text-cyan"></i> AI Route Optimizer & Decision Engine</h2>
+            <p>Predictive terrain, meteorological and geopolitical risk-weighted multimodal route optimization.</p>
+          </div>
+          <span class="disclaimer-badge">DEMO DATA</span>
+        </div>
+
+        <div class="optimizer-grid">
+          <!-- Inputs Form -->
+          <div class="optimizer-form-card">
+            <h3 class="mb-3 text-cyan" style="font-size: 1rem;"><i class="fa-solid fa-sliders"></i> Dispatch Parameters</h3>
+            
+            <form id="optimizerForm" onsubmit="event.preventDefault(); runAiOptimizer();">
+              <div class="form-group">
+                <label class="form-label" for="optOrigin">Origin Hub</label>
+                <select id="optOrigin" class="form-select">
+                  <option value="Guwahati" selected>Guwahati Gateway Logistics Hub (Assam)</option>
+                  <option value="Silchar">Silchar Southern Barak Depot (Assam)</option>
+                  <option value="Dimapur">Dimapur Railhead Logistics Terminal (Nagaland)</option>
+                  <option value="Shillong">Shillong Plateau Depot (Meghalaya)</option>
+                  <option value="Agartala">Agartala Integrated Checkpost Park (Tripura)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="optDest">Destination</label>
+                <select id="optDest" class="form-select">
+                  <option value="Imphal" selected>Imphal Valley Cargo Terminal (Manipur)</option>
+                  <option value="Aizawl">Aizawl Ridge Logistics Base (Mizoram)</option>
+                  <option value="Kohima">Kohima Transit & Staging Park (Nagaland)</option>
+                  <option value="Itanagar">Itanagar Foothills Staging Depot (Arunachal)</option>
+                  <option value="Gangtok">Gangtok High Altitude Logistics Station (Sikkim)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="optCargo">Cargo Classification</label>
+                <select id="optCargo" class="form-select">
+                  <option value="Medicines" selected>Medicines & Vaccines (Cold Chain Certified)</option>
+                  <option value="Food">Food Rations & Essential Grains</option>
+                  <option value="Agricultural Produce">Agricultural Produce & Perishables</option>
+                  <option value="Construction Materials">Bridge Construction Materials & Steel</option>
+                  <option value="Emergency Supplies">Emergency Relief Kits & High-Clearance Gear</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="optPriority">Transit Priority</label>
+                <select id="optPriority" class="form-select">
+                  <option value="Emergency" selected>Emergency Priority (Fastest Safe Routing)</option>
+                  <option value="High">High Priority (Time Sensitive)</option>
+                  <option value="Standard">Standard Priority (Cost Optimized)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="optMode">Transport Mode</label>
+                <select id="optMode" class="form-select">
+                  <option value="Multimodal" selected>Multimodal (Road + Rail + Air Hybrid)</option>
+                  <option value="Road">Direct Road Highway</option>
+                  <option value="Rail">Rail Express Freight</option>
+                  <option value="Air">Air Cargo Corridor</option>
+                </select>
+              </div>
+
+              <button type="submit" class="btn-optimize" id="btnRunOptimizer">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                <span>✦ FIND AI OPTIMAL ROUTE</span>
+              </button>
+            </form>
+          </div>
+
+          <!-- Processing Animation Sequence & Results Area -->
+          <div class="ai-results-wrapper">
+            
+            <!-- AI Processing Sequence Overlay Box -->
+            <div class="ai-processing-box" id="aiProcessingBox">
+              <div class="ai-processing-header">
+                <div class="ai-spinner"></div>
+                <div>
+                  <h4 style="font-size: 0.95rem; color: #fff;">NER Deep Logistics Intelligence Pipeline</h4>
+                  <p class="text-muted" style="font-size: 0.75rem;">Evaluating 42 terrain variables & live telemetry...</p>
+                </div>
+              </div>
+
+              <div class="progress-bar-track">
+                <div class="progress-bar-fill progress-blue" id="aiProgressBar" style="width: 0%;"></div>
+              </div>
+
+              <div class="ai-step-list" id="aiStepList">
+                <div class="ai-step-item" id="step-1"><span>Analyzing terrain & hill gradients...</span> <i class="fa-regular fa-clock"></i></div>
+                <div class="ai-step-item" id="step-2"><span>Checking weather radar & precipitation...</span> <i class="fa-regular fa-clock"></i></div>
+                <div class="ai-step-item" id="step-3"><span>Evaluating geotechnical disruption risk...</span> <i class="fa-regular fa-clock"></i></div>
+                <div class="ai-step-item" id="step-4"><span>Analyzing regional accessibility bottlenecks...</span> <i class="fa-regular fa-clock"></i></div>
+                <div class="ai-step-item" id="step-5"><span>Comparing multimodal transport corridors...</span> <i class="fa-regular fa-clock"></i></div>
+                <div class="ai-step-item" id="step-6"><span>Calculating ETA & fuel efficiency...</span> <i class="fa-regular fa-clock"></i></div>
+                <div class="ai-step-item" id="step-7"><span>Generating optimal verified route...</span> <i class="fa-regular fa-clock"></i></div>
+              </div>
+            </div>
+
+            <!-- Route Analysis Hero Card -->
+            <div class="recommended-route-hero" id="routeResultsHero">
+              <div class="route-hero-top">
+                <div>
+                  <span class="route-badge-recommended" id="routeBadgeText">AI RECOMMENDED ROUTE</span>
+                  <h3 class="mt-2 text-white" id="routeHeroTitle">Route A — NH-2 Primary Corridor (Direct Pass)</h3>
+                  <p class="text-secondary" style="font-size: 0.8rem;" id="routeHeroSub">Guwahati Hub ➔ Nagaon ➔ Dimapur ➔ Kohima ➔ Imphal</p>
+                </div>
+                <div class="text-right">
+                  <div style="font-size: 0.72rem; color: var(--text-muted);">AI CONFIDENCE</div>
+                  <div class="font-mono text-cyan font-weight-bold" style="font-size: 1.4rem;" id="routeHeroConfidence">94%</div>
+                </div>
+              </div>
+
+              <div class="route-stats-row">
+                <div class="route-stat-item">
+                  <span class="route-stat-label">Distance</span>
+                  <span class="route-stat-value" id="routeHeroDistance">312 km</span>
+                </div>
+                <div class="route-stat-item">
+                  <span class="route-stat-label">Estimated ETA</span>
+                  <span class="route-stat-value text-cyan" id="routeHeroEta">7h 20m</span>
+                </div>
+                <div class="route-stat-item">
+                  <span class="route-stat-label">Estimated Cost</span>
+                  <span class="route-stat-value" id="routeHeroCost">₹18,500</span>
+                </div>
+                <div class="route-stat-item">
+                  <span class="route-stat-label">Risk Index</span>
+                  <span class="route-stat-value" id="routeHeroRisk" style="color: #34d399;">LOW</span>
+                </div>
+                <div class="route-stat-item">
+                  <span class="route-stat-label">Accessibility</span>
+                  <span class="route-stat-value" id="routeHeroAccess">91%</span>
+                </div>
+              </div>
+
+              <!-- High Risk Warning in Landslide Mode -->
+              <div id="landslideDangerCallout" style="display: none; background: rgba(239, 68, 68, 0.15); border: 1px solid var(--crimson-danger); border-radius: var(--border-radius); padding: 0.85rem; margin-bottom: 1rem;">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                  <div style="display: flex; align-items: center; gap: 0.65rem;">
+                    <i class="fa-solid fa-triangle-exclamation text-crimson" style="font-size: 1.2rem;"></i>
+                    <div>
+                      <strong class="text-crimson">⚠ HIGH RISK DETECTED: Landslide predicted on primary corridor!</strong>
+                      <p style="font-size: 0.78rem; color: #fca5a5; margin-top: 2px;">Primary NH-2 corridor blocked near Senapati. Delay +1h 45m. Alternate Route B found.</p>
+                    </div>
+                  </div>
+                  <button class="btn btn-danger btn-sm" id="btnRerouteHero" onclick="executeReroute()"><i class="fa-solid fa-shuffle"></i> REROUTE VEHICLE</button>
+                </div>
+              </div>
+
+              <!-- Route Alternatives Selector -->
+              <h4 style="font-size: 0.82rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.65rem;">Corridor Alternatives Comparison</h4>
+              <div class="route-alternatives-grid" id="routeAlternativesGrid">
+                <!-- Populated dynamically -->
+              </div>
+            </div>
+
+            <!-- Explainable AI Panel -->
+            <div class="explainable-ai-card">
+              <div class="explain-header" id="explainToggleBtn">
+                <span><i class="fa-solid fa-lightbulb"></i> WHY DID AI RECOMMEND THIS?</span>
+                <i class="fa-solid fa-chevron-down" id="explainArrow"></i>
+              </div>
+              <div class="explain-body" id="explainBody">
+                <div class="rationale-list" id="rationaleList">
+                  <div class="rationale-item"><i class="fa-solid fa-circle-check"></i> <span>42% lower disruption risk compared to secondary hill routes</span></div>
+                  <div class="rationale-item"><i class="fa-solid fa-circle-check"></i> <span>18 minutes faster travel time through optimal 4-lane segments</span></div>
+                  <div class="rationale-item"><i class="fa-solid fa-circle-check"></i> <span>Maintains 91% all-weather road accessibility rating</span></div>
+                  <div class="rationale-item"><i class="fa-solid fa-circle-check"></i> <span>Avoids active Barak Valley convective storm cells</span></div>
+                  <div class="rationale-item"><i class="fa-solid fa-circle-check"></i> <span>Minimal predicted delay with verified cold-chain staging depots</span></div>
+                </div>
+                <div class="d-flex align-items-center justify-content-between pt-2" style="border-top: 1px solid var(--border-subtle); font-size: 0.75rem; color: var(--text-muted);">
+                  <span>Model: NER-LogisticsDecisionEngine-v4.2 (Simulated)</span>
+                  <span class="text-cyan">Confidence Score: 92%</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Embedded Route Map View -->
+            <div class="map-card-wrapper">
+              <div class="map-card-header">
+                <div class="map-title">
+                  <i class="fa-solid fa-route text-cyan"></i>
+                  <span>AI Route Visualization & Waypoints</span>
+                </div>
+              </div>
+              <div id="optimizerRouteMap" style="height: 380px; width: 100%;"></div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ==================================================================
+           VIEW 3: MULTIMODAL PLANNER
+           ================================================================== -->
+      <section class="view-content" id="view-multimodal">
+        <div class="view-header">
+          <div class="view-title-group">
+            <h2><i class="fa-solid fa-network-wired text-cyan"></i> Multimodal Logistics Planner</h2>
+            <p>Integrated Road, Rail and Air cargo synchromodality for resilient North Eastern supply chains.</p>
+          </div>
+          <span class="disclaimer-badge">DEMO DATA</span>
+        </div>
+
+        <div class="multimodal-options-grid" id="multimodalCardsGrid">
+          <!-- Populated from window.NER_DATA.multimodalRoutes -->
+        </div>
+
+        <!-- Multimodal Map Visualization -->
+        <div class="map-card-wrapper">
+          <div class="map-card-header">
+            <div class="map-title">
+              <i class="fa-solid fa-train-subway text-cyan"></i>
+              <span id="multimodalMapTitle">Multimodal Corridor: ROAD ➔ RAIL ➔ ROAD (Guwahati to Imphal)</span>
+            </div>
+          </div>
+          <div id="multimodalMap" style="height: 440px; width: 100%;"></div>
+        </div>
+      </section>
+
+
+      <!-- ==================================================================
+           VIEW 4: DISRUPTION INTELLIGENCE
+           ================================================================== -->
+      <section class="view-content" id="view-disruptions">
+        <div class="view-header">
+          <div class="view-title-group">
+            <h2><i class="fa-solid fa-cloud-showers-heavy text-cyan"></i> Predictive Disruption Intelligence</h2>
+            <p>Geotechnical slope telemetry, meteorological radar, and infrastructure risk forecasting.</p>
+          </div>
+          <button class="btn btn-primary" onclick="openDemoSimulatorModal()"><i class="fa-solid fa-flask-vial"></i> Trigger Disruption Test</button>
+        </div>
+
+        <!-- 4 Predictive Threat Cards -->
+        <div class="disruption-cards-grid">
+          <div class="threat-card" id="card-landslide-threat">
+            <div class="d-flex align-items-center justify-content-between">
+              <span class="text-secondary font-weight-bold" style="font-size: 0.8rem;">LANDSLIDE RISK</span>
+              <span class="badge badge-at-risk" id="landslideThreatBadge">78% RISK</span>
+            </div>
+            <div class="progress-bar-track">
+              <div class="progress-bar-fill progress-red" id="landslideThreatBar" style="width: 78%;"></div>
+            </div>
+            <div class="d-flex justify-content-between text-muted" style="font-size: 0.72rem;">
+              <span>Confidence: 89%</span>
+              <span class="text-crimson font-mono">+14% trend</span>
+            </div>
+          </div>
+
+          <div class="threat-card">
+            <div class="d-flex align-items-center justify-content-between">
+              <span class="text-secondary font-weight-bold" style="font-size: 0.8rem;">FLOOD RISK</span>
+              <span class="badge badge-delayed">62% RISK</span>
+            </div>
+            <div class="progress-bar-track">
+              <div class="progress-bar-fill progress-blue" style="width: 62%;"></div>
+            </div>
+            <div class="d-flex justify-content-between text-muted" style="font-size: 0.72rem;">
+              <span>Confidence: 84%</span>
+              <span class="text-cyan font-mono">+6% trend</span>
+            </div>
+          </div>
+
+          <div class="threat-card">
+            <div class="d-flex align-items-center justify-content-between">
+              <span class="text-secondary font-weight-bold" style="font-size: 0.8rem;">HEAVY RAINFALL</span>
+              <span class="badge badge-at-risk">91% RISK</span>
+            </div>
+            <div class="progress-bar-track">
+              <div class="progress-bar-fill progress-red" style="width: 91%;"></div>
+            </div>
+            <div class="d-flex justify-content-between text-muted" style="font-size: 0.72rem;">
+              <span>Confidence: 95%</span>
+              <span class="text-crimson font-mono">+22% trend</span>
+            </div>
+          </div>
+
+          <div class="threat-card">
+            <div class="d-flex align-items-center justify-content-between">
+              <span class="text-secondary font-weight-bold" style="font-size: 0.8rem;">TRAFFIC CONGESTION</span>
+              <span class="badge badge-on-route">43% RISK</span>
+            </div>
+            <div class="progress-bar-track">
+              <div class="progress-bar-fill progress-amber" style="width: 43%;"></div>
+            </div>
+            <div class="d-flex justify-content-between text-muted" style="font-size: 0.72rem;">
+              <span>Confidence: 81%</span>
+              <span class="text-emerald font-mono">-4% trend</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Predictive Disruption Timeline -->
+        <div class="optimizer-form-card mt-3">
+          <div class="d-flex align-items-center justify-content-between mb-3">
+            <h3 class="text-cyan" style="font-size: 1rem;"><i class="fa-solid fa-timeline"></i> Disruption Timeline & Impact Progression</h3>
+            <span class="text-muted" style="font-size: 0.75rem;">Click any timeline node to view incident payload</span>
+          </div>
+
+          <div class="timeline-vertical" id="disruptionTimelineContainer">
+            <!-- Populated from window.NER_DATA.disruptionTimeline -->
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ==================================================================
+           VIEW 5: ACCESSIBILITY INTELLIGENCE
+           ================================================================== -->
+      <section class="view-content" id="view-accessibility">
+        <div class="view-header">
+          <div class="view-title-group">
+            <h2><i class="fa-solid fa-mountain-city text-cyan"></i> Accessibility Intelligence & Vulnerability GIS</h2>
+            <p>Identifying underserved regions, terrain bottlenecks, emergency access deficits, and logistics choke points.</p>
+          </div>
+          <span class="disclaimer-badge">DEMO DATA</span>
+        </div>
+
+        <!-- Legend Bar -->
+        <div class="accessibility-legend">
+          <span style="font-size: 0.78rem; font-weight: 700; color: var(--text-muted);">ACCESSIBILITY RATINGS:</span>
+          <div class="legend-item"><span class="color-dot dot-high"></span> <span>🟢 HIGH (&gt;75%)</span></div>
+          <div class="legend-item"><span class="color-dot dot-medium"></span> <span>🟡 MEDIUM (50-74%)</span></div>
+          <div class="legend-item"><span class="color-dot dot-low"></span> <span>🟠 LOW (35-49%)</span></div>
+          <div class="legend-item"><span class="color-dot dot-critical"></span> <span>🔴 CRITICAL GAP (&lt;35%)</span></div>
+        </div>
+
+        <div class="accessibility-layout">
+          <!-- Accessibility Map -->
+          <div class="map-card-wrapper">
+            <div class="map-card-header">
+              <div class="map-title">
+                <i class="fa-solid fa-layer-group text-cyan"></i>
+                <span>Regional Accessibility GIS Heatmap</span>
+              </div>
+            </div>
+            <div id="accessibilityMap" style="height: 520px; width: 100%;"></div>
+          </div>
+
+          <!-- District Deep-Dive Analysis Panel -->
+          <div class="district-detail-card" id="districtDetailCard">
+            <div class="district-select-box">
+              <label class="form-label" for="districtSelector">Select District for Analysis</label>
+              <select id="districtSelector" class="form-select" onchange="onDistrictSelect(this.value)">
+                <!-- Populated dynamically -->
+              </select>
+            </div>
+
+            <div id="districtDetailContent">
+              <!-- Tamenglong rendered by default -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ==================================================================
+           VIEW 6: LIVE VEHICLE TRACKING
+           ================================================================== -->
+      <section class="view-content" id="view-live-tracking">
+        <div class="view-header">
+          <div class="view-title-group">
+            <h2><i class="fa-solid fa-satellite-dish text-cyan"></i> Live Fleet & Vehicle Logistics Tracking</h2>
+            <p>Sub-second telemetry tracking, cargo temperature assurance, and dynamic en-route diversion.</p>
+          </div>
+          <span class="disclaimer-badge">DEMO DATA</span>
+        </div>
+
+        <!-- Live Fleet Map -->
+        <div class="map-card-wrapper mb-4">
+          <div class="map-card-header">
+            <div class="map-title">
+              <i class="fa-solid fa-satellite text-cyan"></i>
+              <span>Live Fleet Geospatial Positioning</span>
+            </div>
+            <div class="d-flex gap-2">
+              <span class="badge badge-on-route"><i class="fa-solid fa-signal"></i> 8 OF 8 VEHICLES ONLINE</span>
+            </div>
+          </div>
+          <div id="fleetTrackingMap" style="height: 420px; width: 100%;"></div>
+        </div>
+
+        <!-- Vehicle Filters -->
+        <div class="fleet-filter-bar">
+          <span style="font-size: 0.78rem; font-weight: 700; color: var(--text-muted); margin-right: 0.5rem;">FILTER STATUS:</span>
+          <button class="filter-chip active" data-filter="ALL" onclick="filterFleet('ALL')">ALL (8)</button>
+          <button class="filter-chip" data-filter="ON ROUTE" onclick="filterFleet('ON ROUTE')">ON ROUTE (4)</button>
+          <button class="filter-chip" data-filter="DELAYED" onclick="filterFleet('DELAYED')">DELAYED (1)</button>
+          <button class="filter-chip" data-filter="AT RISK" onclick="filterFleet('AT RISK')">AT RISK (1)</button>
+          <button class="filter-chip" data-filter="DELIVERED" onclick="filterFleet('DELIVERED')">DELIVERED (1)</button>
+          <button class="filter-chip" data-filter="IDLE" onclick="filterFleet('IDLE')">IDLE (1)</button>
+        </div>
+
+        <!-- Vehicle Table -->
+        <div class="table-responsive">
+          <table class="custom-table" id="fleetTable">
+            <thead>
+              <tr>
+                <th>Vehicle ID</th>
+                <th>Cargo Details</th>
+                <th>Origin</th>
+                <th>Destination</th>
+                <th>Status</th>
+                <th>Speed</th>
+                <th>ETA</th>
+                <th>Risk</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="fleetTableBody">
+              <!-- Populated dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+
+      <!-- ==================================================================
+           VIEW 7: ALERT CENTER
+           ================================================================== -->
+      <section class="view-content" id="view-alerts">
+        <div class="view-header">
+          <div class="view-title-group">
+            <h2><i class="fa-solid fa-triangle-exclamation text-crimson"></i> Regional Logistics Alert Center</h2>
+            <p>Actionable incident notifications, automated reroute dispatch recommendations and audit acknowledgement.</p>
+          </div>
+          <button class="btn btn-outline" onclick="acknowledgeAllAlerts()"><i class="fa-solid fa-check-double"></i> Acknowledge All</button>
+        </div>
+
+        <!-- Alert Filter Tabs -->
+        <div class="alert-tabs">
+          <button class="alert-tab-btn active" data-alert-filter="ALL" onclick="filterAlertsTab('ALL')">ALL ALERTS</button>
+          <button class="alert-tab-btn" data-alert-filter="CRITICAL" onclick="filterAlertsTab('CRITICAL')">CRITICAL</button>
+          <button class="alert-tab-btn" data-alert-filter="WARNING" onclick="filterAlertsTab('WARNING')">WARNINGS</button>
+          <button class="alert-tab-btn" data-alert-filter="INFO" onclick="filterAlertsTab('INFO')">OPERATIONAL INFO</button>
+        </div>
+
+        <!-- Alerts Cards List -->
+        <div class="alerts-list" id="alertsListContainer">
+          <!-- Populated from window.NER_DATA.alerts -->
+        </div>
+      </section>
+
+
+      <!-- ==================================================================
+           VIEW 8: FIELD INTELLIGENCE
+           ================================================================== -->
+      <section class="view-content" id="view-field-reports">
+        <div class="view-header">
+          <div class="view-title-group">
+            <h2><i class="fa-solid fa-clipboard-user text-cyan"></i> Field Intelligence & Ground Reporting</h2>
+            <p>Crowdsourced driver incident reporting with simulated offline storage and auto-synchronization.</p>
+          </div>
+          <span class="disclaimer-badge">OFFLINE-READY</span>
+        </div>
+
+        <!-- Offline Mode Simulation Toggle -->
+        <div class="offline-toggle-banner">
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <i class="fa-solid fa-wifi" id="networkIcon" style="font-size: 1.2rem; color: var(--emerald-success);"></i>
+            <div>
+              <strong id="networkStatusText">Network Mode: ONLINE</strong>
+              <p class="text-muted" style="font-size: 0.75rem;" id="networkSubText">Connected to regional staging gateway. Instant report transmission.</p>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 1rem;">
+            <span style="font-size: 0.8rem; font-weight: 600;">SIMULATE OFFLINE</span>
+            <label class="toggle-switch">
+              <input type="checkbox" id="offlineToggleCheckbox" onchange="toggleOfflineMode(this.checked)">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="field-grid">
+          <!-- Incident Form Card -->
+          <div class="optimizer-form-card">
+            <h3 class="mb-3 text-cyan" style="font-size: 1rem;"><i class="fa-solid fa-file-pen"></i> Submit Ground Incident Report</h3>
+
+            <form id="fieldReportForm" onsubmit="event.preventDefault(); submitFieldReport();">
+              <div class="form-group">
+                <label class="form-label" for="reportType">Incident Type <span class="text-crimson">*</span></label>
+                <select id="reportType" class="form-select" required>
+                  <option value="" disabled selected>Select Incident Type</option>
+                  <option value="Landslide">Landslide / Mudslide on Highway</option>
+                  <option value="Flash Flood">Flash Flood / Road Submerged</option>
+                  <option value="Road Damage">Severe Asphalt Scour / Pothole Rift</option>
+                  <option value="Bridge Impassable">Bridge Structural Impasse</option>
+                  <option value="Traffic Gridlock">Severe Traffic Gridlock / Border Choke</option>
+                </select>
+                <span class="field-error-msg" id="err-reportType"></span>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="reportLocation">Location / Highway Sector <span class="text-crimson">*</span></label>
+                <input type="text" id="reportLocation" class="form-input" placeholder="e.g. NH-2 Senapati Pass, km marker 224" required>
+                <span class="field-error-msg" id="err-reportLocation"></span>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="reportSeverity">Severity Rating <span class="text-crimson">*</span></label>
+                <select id="reportSeverity" class="form-select" required>
+                  <option value="CRITICAL">Critical (Total Closure - Immediate Reroute Required)</option>
+                  <option value="WARNING" selected>Warning (Major Slowdown - Single Lane Only)</option>
+                  <option value="INFO">Informational (Cautionary Debris on Shoulder)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="reportDesc">Description & Vehicle Impact <span class="text-crimson">*</span></label>
+                <textarea id="reportDesc" class="form-textarea" rows="3" placeholder="Provide ground details on blockage width, soil movement and local weather..." required></textarea>
+                <span class="field-error-msg" id="err-reportDesc"></span>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="reportGps">GPS Coordinates</label>
+                <div class="d-flex gap-2">
+                  <input type="text" id="reportGps" class="form-input font-mono" placeholder="25.2678, 94.0185" readonly>
+                  <button type="button" class="btn btn-outline btn-sm" onclick="autoDetectGps()"><i class="fa-solid fa-location-crosshairs"></i> Get GPS</button>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="reportPhoto">Incident Photo Proof (Optional)</label>
+                <input type="file" id="reportPhoto" class="form-input" accept="image/*" onchange="previewReportPhoto(this)">
+                <div id="photoPreviewContainer" style="margin-top: 0.5rem; display: none;">
+                  <img id="photoPreviewImg" src="" alt="Proof Preview" style="max-height: 120px; border-radius: 6px; border: 1px solid var(--border-medium);">
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 0.75rem;">
+                <i class="fa-solid fa-paper-plane"></i>
+                <span>SUBMIT FIELD REPORT</span>
+              </button>
+            </form>
+          </div>
+
+          <!-- Pending Sync & Submitted Reports Feed -->
+          <div>
+            <!-- Pending Synchronization Box -->
+            <div id="offlineSyncCard" style="display: none; background: rgba(245, 158, 11, 0.1); border: 1px solid var(--amber-warning); border-radius: var(--border-radius-lg); padding: 1.15rem; margin-bottom: 1.5rem;">
+              <div class="d-flex align-items-center justify-content-between">
+                <div>
+                  <h4 class="text-amber" style="font-size: 0.95rem;"><i class="fa-solid fa-cloud-arrow-up"></i> Offline Sync Queue</h4>
+                  <p style="font-size: 0.78rem; color: #fde68a;" id="pendingSyncText">Pending Sync: 0 Reports saved in local cache.</p>
+                </div>
+                <button class="btn btn-primary btn-sm" onclick="syncPendingReports()"><i class="fa-solid fa-arrows-rotate"></i> SYNC NOW</button>
+              </div>
+            </div>
+
+            <!-- List of Submitted Reports -->
+            <div class="optimizer-form-card">
+              <div class="d-flex align-items-center justify-content-between mb-3">
+                <h3 class="text-cyan" style="font-size: 1rem;"><i class="fa-solid fa-list-check"></i> Verified Ground Incident Feed</h3>
+                <span class="badge badge-on-route" id="fieldReportsCount">2 REPORTS</span>
+              </div>
+
+              <div class="alerts-list" id="fieldReportsList">
+                <!-- Populated dynamically -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ==================================================================
+           VIEW 9: LOGISTICS ANALYTICS
+           ================================================================== -->
+      <section class="view-content" id="view-analytics">
+        <div class="view-header">
+          <div class="view-title-group">
+            <h2><i class="fa-solid fa-chart-pie text-cyan"></i> Logistics & Resilience Analytics</h2>
+            <p>Longitudinal intelligence on corridor delays, seasonal monsoon disruption correlation, and AI efficacy.</p>
+          </div>
+          <span class="disclaimer-badge">DEMO DATA</span>
+        </div>
+
+        <!-- Date Range Filter Bar -->
+        <div class="analytics-filter-bar">
+          <div class="d-flex align-items-center gap-2">
+            <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted);"><i class="fa-regular fa-calendar"></i> TIMEFRAME:</span>
+            <div class="timeframe-btn-group">
+              <button class="timeframe-btn active" data-timeframe="7d" onclick="changeAnalyticsTimeframe('7d')">7 Days</button>
+              <button class="timeframe-btn" data-timeframe="30d" onclick="changeAnalyticsTimeframe('30d')">30 Days</button>
+              <button class="timeframe-btn" data-timeframe="90d" onclick="changeAnalyticsTimeframe('90d')">90 Days</button>
+              <button class="timeframe-btn" data-timeframe="1y" onclick="changeAnalyticsTimeframe('1y')">1 Year</button>
+            </div>
+          </div>
+
+          <div class="d-flex gap-3 text-muted" style="font-size: 0.78rem;">
+            <span><strong class="text-white" id="statTotalDeliveries">342</strong> Deliveries Tracked</span>
+            <span><strong class="text-emerald" id="statOnTimeRate">96.4%</strong> On-Time Rate</span>
+            <span><strong class="text-cyan" id="statFuelSavings">14.2%</strong> Fuel Saved via AI</span>
+          </div>
+        </div>
+
+        <!-- 6 Responsive Charts Grid -->
+        <div class="charts-grid">
+          <!-- Chart 1: Average Delivery Delay -->
+          <div class="chart-card">
+            <div class="chart-header">
+              <span class="chart-title"><i class="fa-solid fa-stopwatch text-cyan"></i> Average Delivery Delay by Corridor</span>
+              <span class="text-muted" style="font-size: 0.72rem;">Minutes</span>
+            </div>
+            <div class="chart-container">
+              <canvas id="chartCorridorDelay"></canvas>
+            </div>
+          </div>
+
+          <!-- Chart 2: Disruptions by Month -->
+          <div class="chart-card">
+            <div class="chart-header">
+              <span class="chart-title"><i class="fa-solid fa-cloud-showers-heavy text-cyan"></i> Disruptions by Month (Rainfall Correlation)</span>
+              <span class="text-muted" style="font-size: 0.72rem;">Incidents</span>
+            </div>
+            <div class="chart-container">
+              <canvas id="chartDisruptionsMonth"></canvas>
+            </div>
+          </div>
+
+          <!-- Chart 3: District Accessibility -->
+          <div class="chart-card">
+            <div class="chart-header">
+              <span class="chart-title"><i class="fa-solid fa-mountain text-cyan"></i> State Accessibility Index</span>
+              <span class="text-muted" style="font-size: 0.72rem;">0-100 Score</span>
+            </div>
+            <div class="chart-container">
+              <canvas id="chartStateAccessibility"></canvas>
+            </div>
+          </div>
+
+          <!-- Chart 4: Vehicle Utilization -->
+          <div class="chart-card">
+            <div class="chart-header">
+              <span class="chart-title"><i class="fa-solid fa-truck-ramp-box text-cyan"></i> Vehicle Utilization Status</span>
+              <span class="text-muted" style="font-size: 0.72rem;">Fleet Share %</span>
+            </div>
+            <div class="chart-container">
+              <canvas id="chartVehicleUtilization"></canvas>
+            </div>
+          </div>
+
+          <!-- Chart 5: Route Risk Distribution -->
+          <div class="chart-card">
+            <div class="chart-header">
+              <span class="chart-title"><i class="fa-solid fa-shield-halved text-cyan"></i> Route Risk Categorization</span>
+              <span class="text-muted" style="font-size: 0.72rem;">Active Corridors</span>
+            </div>
+            <div class="chart-container">
+              <canvas id="chartRouteRisk"></canvas>
+            </div>
+          </div>
+
+          <!-- Chart 6: Delivery Success Rate with AI -->
+          <div class="chart-card">
+            <div class="chart-header">
+              <span class="chart-title"><i class="fa-solid fa-arrow-trend-up text-cyan"></i> Delivery Success Rate (With vs. Without AI)</span>
+              <span class="text-muted" style="font-size: 0.72rem;">On-Time %</span>
+            </div>
+            <div class="chart-container">
+              <canvas id="chartDeliverySuccess"></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ==================================================================
+           VIEW 10: SYSTEM SETTINGS & ARCHITECTURE
+           ================================================================== -->
+      <section class="view-content" id="view-settings">
+        <div class="view-header">
+          <div class="view-title-group">
+            <h2><i class="fa-solid fa-sliders text-cyan"></i> Platform Architecture & Demonstration Settings</h2>
+            <p>API-ready service contracts, simulated telemetry parameters, and demo state reset.</p>
+          </div>
+          <span class="disclaimer-badge">API-READY</span>
+        </div>
+
+        <div class="optimizer-grid">
+          <div class="optimizer-form-card">
+            <h3 class="text-cyan mb-3" style="font-size: 1rem;"><i class="fa-solid fa-server"></i> API Migration Contracts</h3>
+            <p class="text-secondary mb-3" style="font-size: 0.82rem;">
+              The frontend is decoupled through a clean JavaScript service abstraction layer (<code>window.api</code>). All demo datasets can be transitioned to production REST / gRPC backends by pointing API base URLs to:
+            </p>
+            
+            <div style="background: rgba(0,0,0,0.4); padding: 0.85rem; border-radius: var(--border-radius); font-family: var(--font-mono); font-size: 0.75rem; color: #38bdf8; display: flex; flex-direction: column; gap: 0.4rem;">
+              <div>GET /api/v1/vehicles ➔ Live GPS Fleet</div>
+              <div>GET /api/v1/routes/optimize ➔ OR-Tools / AI Engine</div>
+              <div>GET /api/v1/disruptions/predict ➔ Satellite & GIS</div>
+              <div>GET /api/v1/districts/accessibility ➔ Vulnerability Index</div>
+              <div>POST /api/v1/field-reports ➔ Ground Crowdsourcing</div>
+              <div>POST /api/v1/vehicle/reroute ➔ On-Board Telematics</div>
+            </div>
+
+            <div class="mt-4 pt-3" style="border-top: 1px solid var(--border-subtle);">
+              <h4 style="font-size: 0.85rem; color: #fff; margin-bottom: 0.5rem;">State Management & Cache</h4>
+              <p class="text-muted mb-3" style="font-size: 0.75rem;">Restore initial demonstration values and clear local storage logs.</p>
+              <button class="btn btn-danger" onclick="resetDemoData()"><i class="fa-solid fa-arrow-rotate-left"></i> Reset All Demo Data</button>
+            </div>
+          </div>
+
+          <!-- Architecture & Hackathon Context Card -->
+          <div class="optimizer-form-card">
+            <h3 class="text-cyan mb-3" style="font-size: 1rem;"><i class="fa-solid fa-trophy"></i> Smart India Hackathon & Government Pitch</h3>
+            <div class="d-flex flex-column gap-3" style="font-size: 0.82rem; color: var(--text-secondary);">
+              <div>
+                <strong class="text-white">Problem Statement:</strong>
+                <p>The North Eastern Region faces severe supply-chain isolation due to complex terrain, monsoonal landslides, bridge bottlenecks, and fragmented multimodal coordination.</p>
+              </div>
+              <div>
+                <strong class="text-white">Our Innovation:</strong>
+                <p>NER-SMARTLOG AI unifies satellite disaster predictions, road accessibility scoring, and intelligent dynamic rerouting into an actionable command-and-control platform.</p>
+              </div>
+              <div>
+                <strong class="text-white">Impact Delivered:</strong>
+                <p>Reduces emergency medical transit delays by 34%, cuts carbon emissions through rail/road synchromodality, and keeps border communities connected.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+
+  <!-- ======================================================================
+       MODAL 1: DEMO SIMULATION ENGINE (DISRUPTION SIMULATOR)
+       ====================================================================== -->
+  <div class="modal-overlay" id="demoSimModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title text-cyan">
+          <i class="fa-solid fa-flask-vial"></i>
+          <span>Disruption Simulation Engine</span>
+        </div>
+        <button class="modal-close-btn" onclick="closeDemoSimulatorModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="modal-body">
+        <p class="text-secondary" style="font-size: 0.85rem;">
+          Trigger real-time crisis scenarios across the North Eastern Region to observe the multi-tiered reactive pipeline: <strong>Hazard Detection ➔ Alert Dispatch ➔ AI Rerouting ➔ Fleet Telematics Update</strong>.
+        </p>
+
+        <div class="simulator-options-grid">
+          <!-- Button 1: Landslide (Core SIH Flow) -->
+          <div class="sim-btn btn-landslide" id="simBtnLandslide" onclick="triggerSimulation('Landslide')">
+            <i class="fa-solid fa-hill-rockslide"></i>
+            <strong class="text-white">[ Simulate Landslide ]</strong>
+            <small class="text-muted">Triggers severe slope failure on NH-2 Corridor (Senapati-Kohima). Impasses primary Guwahati ➔ Imphal transit.</small>
+          </div>
+
+          <!-- Button 2: Heavy Rainfall -->
+          <div class="sim-btn btn-rainfall" id="simBtnRainfall" onclick="triggerSimulation('Rainfall')">
+            <i class="fa-solid fa-cloud-showers-heavy"></i>
+            <strong class="text-white">[ Simulate Heavy Rainfall ]</strong>
+            <small class="text-muted">Cloudburst &gt;75mm/h across Haflong hill pass. Triggers convoy speed throttling.</small>
+          </div>
+
+          <!-- Button 3: Road Blockage -->
+          <div class="sim-btn btn-blockage" id="simBtnBlockage" onclick="triggerSimulation('Blockage')">
+            <i class="fa-solid fa-road-barrier"></i>
+            <strong class="text-white">[ Simulate Road Blockage ]</strong>
+            <small class="text-muted">Bridge structural clearance closure near Silchar-Jiribam feeder.</small>
+          </div>
+
+          <!-- Button 4: Traffic Congestion -->
+          <div class="sim-btn btn-traffic" id="simBtnTraffic" onclick="triggerSimulation('Traffic')">
+            <i class="fa-solid fa-car-tunnel"></i>
+            <strong class="text-white">[ Simulate Traffic Congestion ]</strong>
+            <small class="text-muted">Inter-state checkpost freight queue backup at Dimapur toll plaza.</small>
+          </div>
+
+          <!-- Reset Simulation Button -->
+          <div class="sim-btn sim-btn-reset" onclick="resetSimulation()">
+            <i class="fa-solid fa-rotate-left"></i>
+            <span>Reset Simulation to Baseline State</span>
+          </div>
+        </div>
+
+        <div class="mt-4 p-3" style="background: rgba(0, 242, 254, 0.05); border: 1px solid var(--border-cyan); border-radius: var(--border-radius); font-size: 0.78rem;">
+          <strong class="text-cyan"><i class="fa-solid fa-lightbulb"></i> Recommended SIH 3-Minute Presentation Walkthrough:</strong>
+          <ol class="mt-2 pl-3" style="line-height: 1.5; color: var(--text-secondary);">
+            <li>Click <strong>[ Simulate Landslide ]</strong> above.</li>
+            <li>Observe how the entire platform reacts globally: NH-2 marked Critical, KPI alerts rise.</li>
+            <li>In the AI Route Optimizer, vehicle NER-104 automatically receives the <strong>NH-37 Jiribam Alternate Route</strong>.</li>
+            <li>Click <strong>REROUTE VEHICLE</strong> to animate diversion and verify on Live Tracking!</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ======================================================================
+       MODAL 2: VEHICLE DETAIL PANEL
+       ====================================================================== -->
+  <div class="modal-overlay" id="vehicleDetailModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">
+          <i class="fa-solid fa-truck text-cyan"></i>
+          <span id="vehicleModalTitle">Vehicle NER-104</span>
+        </div>
+        <button class="modal-close-btn" onclick="closeVehicleModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="modal-body" id="vehicleModalBody">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ======================================================================
+       MODAL 3: SYSTEM STATUS PANEL
+       ====================================================================== -->
+  <div class="modal-overlay" id="systemStatusModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title text-cyan">
+          <i class="fa-solid fa-server"></i>
+          <span>NER-SMARTLOG AI - System Services Status</span>
+        </div>
+        <button class="modal-close-btn" onclick="closeSystemStatusModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="d-flex flex-column gap-3">
+          <div class="d-flex align-items-center justify-content-between p-2" style="background: rgba(255,255,255,0.03); border-radius: 6px;">
+            <span><i class="fa-solid fa-map text-cyan mr-2"></i> Map Services (OpenStreetMap / Leaflet)</span>
+            <span class="badge badge-on-route">● Operational</span>
+          </div>
+          <div class="d-flex align-items-center justify-content-between p-2" style="background: rgba(255,255,255,0.03); border-radius: 6px;">
+            <span><i class="fa-solid fa-brain text-cyan mr-2"></i> Route Intelligence & Optimization Engine</span>
+            <span class="badge badge-on-route">● Operational</span>
+          </div>
+          <div class="d-flex align-items-center justify-content-between p-2" style="background: rgba(255,255,255,0.03); border-radius: 6px;">
+            <span><i class="fa-solid fa-satellite text-cyan mr-2"></i> Vehicle Tracking & Fleet Telematics</span>
+            <span class="badge badge-on-route">● Operational</span>
+          </div>
+          <div class="d-flex align-items-center justify-content-between p-2" style="background: rgba(255,255,255,0.03); border-radius: 6px;">
+            <span><i class="fa-solid fa-bell text-cyan mr-2"></i> Alert Engine & Threat Dissemination</span>
+            <span class="badge badge-on-route">● Operational</span>
+          </div>
+          <div class="d-flex align-items-center justify-content-between p-2" style="background: rgba(255,255,255,0.03); border-radius: 6px;">
+            <span><i class="fa-solid fa-database text-cyan mr-2"></i> Data Synchronization & IndexedDB Cache</span>
+            <span class="badge badge-on-route">● Operational</span>
+          </div>
+        </div>
+        <p class="text-muted mt-3" style="font-size: 0.75rem;">Node ID: NER-CLUSTER-GAU-01 | Latency: 18ms | High Availability Multi-Region Replica</p>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ======================================================================
+       MODAL 4: ABOUT PLATFORM
+       ====================================================================== -->
+  <div class="modal-overlay" id="aboutModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title text-cyan">
+          <i class="fa-solid fa-circle-info"></i>
+          <span>About NER-SMARTLOG AI</span>
+        </div>
+        <button class="modal-close-btn" onclick="closeAboutModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="modal-body" style="font-size: 0.85rem; line-height: 1.6; color: var(--text-secondary);">
+        <p><strong>NER-SMARTLOG AI</strong> is an enterprise-grade AI-Based Smart Logistics & Accessibility Intelligence Platform engineered specifically for the distinct geographical vulnerabilities of the North Eastern Region of India.</p>
+        <p class="mt-2">It integrates terrain vulnerability indexes, real-time weather and landslide prediction models, synchromodal transport (Road, Rail, Air), and autonomous emergency rerouting to guarantee lifeline supply distribution during monsoon blockades and disasters.</p>
+        <div class="mt-3 p-3" style="background: rgba(0, 242, 254, 0.05); border-radius: 8px; border: 1px solid var(--border-cyan);">
+          <strong class="text-white">Designed for:</strong>
+          <ul class="mt-1 pl-3" style="font-size: 0.8rem;">
+            <li>Smart India Hackathon & Government Technology Demonstrations</li>
+            <li>State Disaster Management Authorities (SDMA) of the 8 NER States</li>
+            <li>North Eastern Regional Agricultural Marketing Corporation (NERAMAC)</li>
+            <li>Border Roads Organisation (BRO) and National Highways Authority (NHAI)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ======================================================================
+       TOAST NOTIFICATION CONTAINER
+       ====================================================================== -->
+  <div class="toast-container" id="toastContainer"></div>
+
+
+  <!-- ======================================================================
+       DEPENDENCIES & SCRIPTS (ZERO BUILD PROCESS - OPENS DIRECTLY IN BROWSER)
+       ====================================================================== -->
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Modular Datasets (Attach to window.NER_DATA) -->
+  <script src="data/vehicles.js"></script>
+  <script src="data/routes.js"></script>
+  <script src="data/disruptions.js"></script>
+  <script src="data/districts.js"></script>
+  <script src="data/alerts.js"></script>
+  <script src="data/analytics.js"></script>
+
+  <!-- Master Application Script -->
+  <script src="script.js"></script>
+</body>
+</html>

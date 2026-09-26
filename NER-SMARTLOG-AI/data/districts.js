@@ -1,0 +1,306 @@
+/**
+ * NER-SMARTLOG AI - District Accessibility Intelligence Dataset
+ * Focuses on logistics bottlenecks, emergency medical access, and connectivity gaps.
+ * DEMO DATA: Simulated terrain connectivity indexes across the 8 North Eastern states.
+ */
+
+window.NER_DATA = window.NER_DATA || {};
+
+window.NER_DATA.districts = [
+  {
+    id: "DIST-MN-TAM",
+    name: "Tamenglong",
+    state: "Manipur",
+    lat: 24.9850,
+    lng: 93.4920,
+    connectivityScore: 42,
+    accessibilityLevel: "LOW",
+    accessibilityBadge: "warning",
+    nearestHub: "Imphal Valley Cargo Terminal (108 km)",
+    nearestHubDistKm: 108,
+    nearestHospital: "District Civil Hospital Tamenglong (18 km) / RIMS Imphal (104 km)",
+    nearestHospitalKm: 42,
+    avgSupplyETA: "11h 40m",
+    risk: "HIGH",
+    population: "140,651",
+    terrain: "Rugged Barail range, deep ravines & high-rainfall jungle",
+    allWeatherRoadPct: "34%",
+    connectivityGaps: [
+      "Remote tribal hamlets accessible only by seasonal earth tracks",
+      "Single-lane timber bridges restricted to <8 MT axle load",
+      "Average 45 days of monsoon vehicle isolation per annum",
+      "Zero railway connectivity; reliant on fragile hill feeder roads",
+      "Critical emergency medical airlift deficiency during night hours"
+    ],
+    logisticsBottlenecks: "Severe hairpin grade (>14% slope) on Khongsang-Tamenglong route.",
+    primarySuppliesNeeded: ["Emergency Pharmaceuticals", "Infant Nutrition", "Diesel Generator Fuel", "Prefab Bridge Truss"]
+  },
+  {
+    id: "DIST-MN-SEN",
+    name: "Senapati",
+    state: "Manipur",
+    lat: 25.2678,
+    lng: 94.0185,
+    connectivityScore: 54,
+    accessibilityLevel: "MEDIUM",
+    accessibilityBadge: "primary",
+    nearestHub: "Dimapur Logistics Hub (92 km)",
+    nearestHubDistKm: 92,
+    nearestHospital: "Senapati District Hospital (6 km)",
+    nearestHospitalKm: 6,
+    avgSupplyETA: "5h 15m",
+    risk: "HIGH",
+    population: "479,148",
+    terrain: "Steep mountain passes along NH-2 corridor",
+    allWeatherRoadPct: "58%",
+    connectivityGaps: [
+      "NH-2 pass prone to frequent geotechnical debris creep",
+      "High reliance on single trunk highway with zero paved bypasses",
+      "Steep valley settlements with lack of secondary feeder paving"
+    ],
+    logisticsBottlenecks: "Frequent monsoon shoulder slips near Maram and Mao gates.",
+    primarySuppliesNeeded: ["Road Clearing Heavy Machinery", "Medicines", "Grain Stores"]
+  },
+  {
+    id: "DIST-MN-IMP",
+    name: "Imphal West",
+    state: "Manipur",
+    lat: 24.8170,
+    lng: 93.9368,
+    connectivityScore: 92,
+    accessibilityLevel: "HIGH",
+    accessibilityBadge: "success",
+    nearestHub: "Imphal Valley Cargo Terminal (In-District)",
+    nearestHubDistKm: 4,
+    nearestHospital: "RIMS Regional Institute of Medical Sciences (2 km)",
+    nearestHospitalKm: 2,
+    avgSupplyETA: "0h 45m",
+    risk: "LOW",
+    population: "517,992",
+    terrain: "Alluvial valley plain with dual air cargo access",
+    allWeatherRoadPct: "94%",
+    connectivityGaps: [
+      "Urban congestion delays during morning commercial deliveries",
+      "Valley perimeter choke points vulnerable during highway blockades"
+    ],
+    logisticsBottlenecks: "Ring road bottlenecks around Khwairamband Bazaar depot.",
+    primarySuppliesNeeded: ["Multimodal Rail-Head Container Staging", "Cold Chain Warehouse Expansion"]
+  },
+  {
+    id: "DIST-AS-DHA",
+    name: "Dima Hasao",
+    state: "Assam",
+    lat: 25.1700,
+    lng: 92.9800,
+    connectivityScore: 46,
+    accessibilityLevel: "LOW",
+    accessibilityBadge: "warning",
+    nearestHub: "Silchar Southern Barak Depot (72 km)",
+    nearestHubDistKm: 72,
+    nearestHospital: "Haflong Civil Hospital (8 km)",
+    nearestHospitalKm: 8,
+    avgSupplyETA: "8h 30m",
+    risk: "HIGH",
+    population: "214,102",
+    terrain: "Unstable sedimentary shale hills; active fault zones",
+    allWeatherRoadPct: "41%",
+    connectivityGaps: [
+      "East-West Corridor hill section historically vulnerable to flash slips",
+      "Remote interior villages cut off during Brahmaputra monsoon crests",
+      "Narrow railway gauges prone to tunnel rockfalls"
+    ],
+    logisticsBottlenecks: "Jatinga valley fog and subsidence zone on NH-27.",
+    primarySuppliesNeeded: ["Emergency Bridge Bailey Kits", "Power Transmission Spares", "Food Grains"]
+  },
+  {
+    id: "DIST-AS-KAM",
+    name: "Kamrup Metropolitan",
+    state: "Assam",
+    lat: 26.1445,
+    lng: 91.7362,
+    connectivityScore: 96,
+    accessibilityLevel: "HIGH",
+    accessibilityBadge: "success",
+    nearestHub: "Guwahati Gateway Logistics Hub (In-District)",
+    nearestHubDistKm: 0,
+    nearestHospital: "GMC Hospital & AIIMS Guwahati (8 km)",
+    nearestHospitalKm: 8,
+    avgSupplyETA: "0h 30m",
+    risk: "LOW",
+    population: "1,253,938",
+    terrain: "Brahmaputra alluvial plain with intermodal road, rail, air & river ports",
+    allWeatherRoadPct: "98%",
+    connectivityGaps: [
+      "Urban flood ponding in low-lying commercial warehouse clusters",
+      "Heavy interstate freight transit toll congestion"
+    ],
+    logisticsBottlenecks: "Saraighat Bridge approach freight choke during peak transit windows.",
+    primarySuppliesNeeded: ["Autonomous Yard Automation", "Expanded Cold-Storage Distribution Units"]
+  },
+  {
+    id: "DIST-AR-UPS",
+    name: "Upper Siang",
+    state: "Arunachal Pradesh",
+    lat: 28.6120,
+    lng: 94.9540,
+    connectivityScore: 28,
+    accessibilityLevel: "CRITICAL GAP",
+    accessibilityBadge: "danger",
+    nearestHub: "Itanagar Foothills Staging Depot (290 km)",
+    nearestHubDistKm: 290,
+    nearestHospital: "Yingkiong District Hospital (24 km)",
+    nearestHospitalKm: 65,
+    avgSupplyETA: "22h 10m",
+    risk: "HIGH",
+    population: "35,320",
+    terrain: "High Himalayan glacial canyons & torrential Tsangpo/Siang river gorge",
+    allWeatherRoadPct: "22%",
+    connectivityGaps: [
+      "Border villages accessible only via pedestrian rope suspension bridges",
+      "Frequent catastrophic snow-melt landslides severing Yingkiong-Tuting axis",
+      "Zero civilian air connectivity; emergency supplies strictly helipad-dependent"
+    ],
+    logisticsBottlenecks: "Single-lane hanging suspension bridges with strict 3-tonne load limits.",
+    primarySuppliesNeeded: ["Heavy Winter Medicines", "Emergency Solar Radio Gear", "Aviation Turbine Fuel Drops"]
+  },
+  {
+    id: "DIST-NL-MON",
+    name: "Mon",
+    state: "Nagaland",
+    lat: 26.7450,
+    lng: 95.0600,
+    connectivityScore: 32,
+    accessibilityLevel: "CRITICAL GAP",
+    accessibilityBadge: "danger",
+    nearestHub: "Dimapur Railhead Hub (195 km)",
+    nearestHubDistKm: 195,
+    nearestHospital: "Mon District Hospital (12 km)",
+    nearestHospitalKm: 28,
+    avgSupplyETA: "14h 50m",
+    risk: "HIGH",
+    population: "250,260",
+    terrain: "Indo-Myanmar border highland ridges with heavy clay soils",
+    allWeatherRoadPct: "29%",
+    connectivityGaps: [
+      "Unpaved clay hill roads becoming slush-impassable in monsoon",
+      "Isolated Eastern Nagaland villages lack cellular logistics tracking",
+      "High vehicle wear & tire puncture rates due to uncrushed gravel"
+    ],
+    logisticsBottlenecks: "Sonari-Mon hill gradient impassable for standard 2-axle commercial carriers during rains.",
+    primarySuppliesNeeded: ["Off-road 4x4 Medical Vans", "Rice & Salt Buffer Stocks", "Water Purification Tablets"]
+  },
+  {
+    id: "DIST-MZ-LAW",
+    name: "Lawngtlai",
+    state: "Mizoram",
+    lat: 22.5280,
+    lng: 92.8980,
+    connectivityScore: 35,
+    accessibilityLevel: "CRITICAL GAP",
+    accessibilityBadge: "danger",
+    nearestHub: "Aizawl Ridge Logistics Base (210 km)",
+    nearestHubDistKm: 210,
+    nearestHospital: "Lawngtlai District Hospital (15 km)",
+    nearestHospitalKm: 34,
+    avgSupplyETA: "15h 20m",
+    risk: "HIGH",
+    population: "117,894",
+    terrain: "Southern border mountainous tropical jungle",
+    allWeatherRoadPct: "31%",
+    connectivityGaps: [
+      "Kaladan Multi-Modal transit corridor development under construction",
+      "Extreme isolation during South-West monsoon cyclonic depressions",
+      "Heavy reliance on long-distance diesel transport through steep hills"
+    ],
+    logisticsBottlenecks: "Unsurfaced river culverts overflowing rapidly with 2-hour rain bursts.",
+    primarySuppliesNeeded: ["Anti-Malarial Medications", "Diesel Generators", "Mobile Communication Units"]
+  },
+  {
+    id: "DIST-SK-MNG",
+    name: "North Sikkim (Mangan)",
+    state: "Sikkim",
+    lat: 27.5050,
+    lng: 88.5300,
+    connectivityScore: 31,
+    accessibilityLevel: "CRITICAL GAP",
+    accessibilityBadge: "danger",
+    nearestHub: "Gangtok High Altitude Logistics Station (68 km)",
+    nearestHubDistKm: 68,
+    nearestHospital: "Mangan District Hospital (14 km)",
+    nearestHospitalKm: 32,
+    avgSupplyETA: "9h 40m",
+    risk: "HIGH",
+    population: "43,709",
+    terrain: "Permafrost, glacial moraine valleys & high seismic slope instability",
+    allWeatherRoadPct: "28%",
+    connectivityGaps: [
+      "Frequent catastrophic glacial lake outburst flood (GLOF) damage to NH-10",
+      "Chungthang bridge choke points critical for Northern border access",
+      "Winter sub-zero icing paralyzing conventional diesel fuel lines"
+    ],
+    logisticsBottlenecks: "Teesta river gorge rockfall zones requiring daily BRO bulldozing.",
+    primarySuppliesNeeded: ["Sub-Zero Winterized Fuel", "High-Altitude Oxygen Concentrators", "Prefab Bailey Bridge Spans"]
+  },
+  {
+    id: "DIST-TR-DHA",
+    name: "Dhalai",
+    state: "Tripura",
+    lat: 23.8400,
+    lng: 91.8500,
+    connectivityScore: 58,
+    accessibilityLevel: "MEDIUM",
+    accessibilityBadge: "primary",
+    nearestHub: "Agartala Integrated Checkpost Park (95 km)",
+    nearestHubDistKm: 95,
+    nearestHospital: "Kulal District Hospital Ambassa (7 km)",
+    nearestHospitalKm: 7,
+    avgSupplyETA: "4h 10m",
+    risk: "MEDIUM",
+    population: "378,230",
+    terrain: "Parallel hill ranges (Atharamura & Longthorai) dissected by valleys",
+    allWeatherRoadPct: "67%",
+    connectivityGaps: [
+      "Longthorai hill tunnel bottleneck on NH-8 single arterial highway",
+      "Tribal hamlets across Dhalai river lack all-weather motor bridges"
+    ],
+    logisticsBottlenecks: "Narrow ghat curves on NH-8 between Teliamura and Ambassa.",
+    primarySuppliesNeeded: ["Maternal Health Kits", "All-Weather Fertilizer Stock", "Rural Water Filtration"]
+  },
+  {
+    id: "DIST-ML-SHL",
+    name: "East Khasi Hills",
+    state: "Meghalaya",
+    lat: 25.5788,
+    lng: 91.8933,
+    connectivityScore: 88,
+    accessibilityLevel: "HIGH",
+    accessibilityBadge: "success",
+    nearestHub: "Shillong Plateau Depot (In-District)",
+    nearestHubDistKm: 0,
+    nearestHospital: "NEIGRIHMS Super-Specialty Hospital (5 km)",
+    nearestHospitalKm: 5,
+    avgSupplyETA: "1h 15m",
+    risk: "LOW",
+    population: "825,922",
+    terrain: "Rolling tableland with high-grade 4-lane expressway connection to Guwahati",
+    allWeatherRoadPct: "89%",
+    connectivityGaps: [
+      "Southern slopes (Cherrapunji/Mawsynram) experience severe rainfall fog",
+      "Shillong bypass bottlenecks during heavy truck transit hours"
+    ],
+    logisticsBottlenecks: "Umiam Lake bridge load restrictions for ultra-heavy low-bed trailers.",
+    primarySuppliesNeeded: ["Smart Highway Telemetry", "Buffer Stock Medical Reserves"]
+  }
+];
+
+// District state summaries
+window.NER_DATA.stateAccessibilitySummary = [
+  { state: "Assam", avgScore: 81, level: "HIGH", districtsCount: 35, bottleneckCorridors: 3 },
+  { state: "Meghalaya", avgScore: 74, level: "MEDIUM", districtsCount: 12, bottleneckCorridors: 2 },
+  { state: "Tripura", avgScore: 72, level: "MEDIUM", districtsCount: 8, bottleneckCorridors: 1 },
+  { state: "Nagaland", avgScore: 56, level: "MEDIUM", districtsCount: 16, bottleneckCorridors: 4 },
+  { state: "Mizoram", avgScore: 52, level: "MEDIUM", districtsCount: 11, bottleneckCorridors: 3 },
+  { state: "Manipur", avgScore: 49, level: "LOW", districtsCount: 16, bottleneckCorridors: 5 },
+  { state: "Sikkim", avgScore: 48, level: "LOW", districtsCount: 6, bottleneckCorridors: 2 },
+  { state: "Arunachal Pradesh", avgScore: 36, level: "CRITICAL GAP", districtsCount: 26, bottleneckCorridors: 8 }
+];
